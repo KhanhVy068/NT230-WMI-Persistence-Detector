@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "subscription_id": {
+      "type": "string"
+    },
+    "namespace": {
+      "type": "string"
+    },
+    "filter": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "query": { "type": "string" }
+      },
+      "required": [ "name", "query" ]
+    },
+    "consumer": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" }
+      },
+      "required": [ "name", "type" ]
+    },
+    "binding": {
+      "type": "object",
+      "properties": {
+        "filter": { "type": "string" },
+        "consumer": { "type": "string" }
+      },
+      "required": [ "filter", "consumer" ]
+    }
+  },
+  "required": [
+    "subscription_id",
+    "namespace",
+    "filter",
+    "consumer",
+    "binding"
+  ]
+}

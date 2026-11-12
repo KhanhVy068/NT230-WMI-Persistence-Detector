@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Environment
+.env
+
+# Virtual machines
+*.ova
+*.vdi
+*.vmdk
+
+# Temporary files
+*.log
+*.tmp
