@@ -1,3 +1,4 @@
+```
 D12-WMI-Persistence-Detector/
 │
 ├── poc/                        # TV1 – PoC & Automation
@@ -46,3 +47,4 @@ D12-WMI-Persistence-Detector/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+```
