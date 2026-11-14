@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S012",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_8a4f13c2",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_8a4f13c2\""
+  },
+  "consumer": {
+    "name": "Action_08020992",
+    "type": "LogFileEventConsumer",
+    "filename": "C:\\D12Lab\\logs\\process.log",
+    "text": "Process-start audit",
+    "path": "root\\subscription:LogFileEventConsumer.Name=\"Action_08020992\""
+  },
+  "binding": {
+    "filter": "Trigger_8a4f13c2",
+    "consumer": "Action_08020992",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_8a4f13c2\"",
+    "consumer_path": "root\\subscription:LogFileEventConsumer.Name=\"Action_08020992\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

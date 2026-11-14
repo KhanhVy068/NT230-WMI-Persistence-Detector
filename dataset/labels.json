@@ -1,0 +1,552 @@
+{
+  "S001": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s001.json",
+    "source": "synthetic",
+    "scenario": "Đường dẫn chương trình nằm trong Users Public",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R03"
+    ],
+    "rule_descriptions": {
+      "R03": "Cảnh báo khi đường dẫn chương trình hoặc script được thực thi nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; quyền ghi thực tế chưa được xác minh."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "public_executable",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "check.exe là đường dẫn minh họa, chưa có chương trình thực thi để kiểm thử."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S002": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s002.json",
+    "source": "synthetic",
+    "scenario": "PowerShell đọc script từ AppData",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R03"
+    ],
+    "rule_descriptions": {
+      "R03": "Cảnh báo khi đường dẫn chương trình hoặc script được thực thi nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; quyền ghi thực tế chưa được xác minh."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "appdata_powershell",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "File check.ps1 chưa được cung cấp; nội dung dự kiến là Write-Output 'Lab check'."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S003": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s003.json",
+    "source": "synthetic",
+    "scenario": "Consumer kết hợp đường dẫn script trong Temp và cửa sổ ẩn",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R02",
+      "R03"
+    ],
+    "rule_descriptions": {
+      "R02": "Cảnh báo khi Consumer gọi PowerShell với -WindowStyle Hidden; tiêu chí là yêu cầu chạy ẩn trong cấu hình WMI.",
+      "R03": "Cảnh báo khi đường dẫn chương trình hoặc script được thực thi nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; quyền ghi thực tế chưa được xác minh."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "combined_path_hidden",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "File check.ps1 chưa được cung cấp; nội dung dự kiến là Write-Output 'Lab check'."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S004": {
+    "label": "benign",
+    "file": "benign/sample_s004.json",
+    "source": "synthetic",
+    "scenario": "PowerShell đọc thời gian hệ thống",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "powershell_date",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S005": {
+    "label": "benign",
+    "file": "benign/sample_s005.json",
+    "source": "synthetic",
+    "scenario": "VBScript xử lý chuỗi trong bộ nhớ",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "script_string",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Bộ máy VBScript khả dụng trong Windows VM."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S006": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s006.json",
+    "source": "synthetic",
+    "scenario": "Cscript thực thi script trong Downloads",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R03"
+    ],
+    "rule_descriptions": {
+      "R03": "Cảnh báo khi đường dẫn chương trình hoặc script được thực thi nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; quyền ghi thực tế chưa được xác minh."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "downloads_script",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "File check.vbs chưa được cung cấp; nội dung dự kiến chỉ xử lý biến trong bộ nhớ."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S007": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s007.json",
+    "source": "synthetic",
+    "scenario": "Biến thể chữ hoa/thường và khoảng trắng của tham số chạy ẩn",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R02"
+    ],
+    "rule_descriptions": {
+      "R02": "Cảnh báo khi Consumer gọi PowerShell với -WindowStyle Hidden; tiêu chí là yêu cầu chạy ẩn trong cấu hình WMI."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "hidden_window",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S008": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s008.json",
+    "source": "synthetic",
+    "scenario": "PowerShell yêu cầu kiểu cửa sổ ẩn",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R02"
+    ],
+    "rule_descriptions": {
+      "R02": "Cảnh báo khi Consumer gọi PowerShell với -WindowStyle Hidden; tiêu chí là yêu cầu chạy ẩn trong cấu hình WMI."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "hidden_window",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S009": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s009.json",
+    "source": "synthetic",
+    "scenario": "PowerShell truyền lệnh qua Base64 UTF-16LE",
+    "reason": "Tham số EncodedCommand khớp R01. Nội dung giải mã chỉ hiển thị thông báo hoặc đọc thời gian.",
+    "expected_rule_ids": [
+      "R01"
+    ],
+    "rule_descriptions": {
+      "R01": "Cảnh báo khi Consumer gọi PowerShell với -EncodedCommand; tiêu chí là dạng truyền lệnh cần kiểm tra thêm."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "encoded_command",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "decoded_command": "Write-Output 'Lab check'"
+  },
+  "S010": {
+    "label": "benign",
+    "file": "benign/sample_s010.json",
+    "source": "synthetic",
+    "scenario": "Binding thứ hai dùng chung Filter kiểm toán tiến trình",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "log_process",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Thư mục log tồn tại và có quyền ghi."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "relationship_note": "Hai mẫu thuộc nhóm log_process dùng chung một filter_path và có hai consumer_path khác nhau.",
+    "normalizer_note": "Normalizer hiện tại giữ thuộc tính đặc thù của loại Consumer này trong raw.consumer; Detector cần đọc tại đó nếu phân tích các thuộc tính này."
+  },
+  "S011": {
+    "label": "benign",
+    "file": "benign/sample_s011.json",
+    "source": "synthetic",
+    "scenario": "Ghi sự kiện kiểm toán tiến trình vào Event Log",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "eventlog_process",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Nguồn Event Log D12LabAudit được đăng ký phù hợp."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "normalizer_note": "Normalizer hiện tại giữ thuộc tính đặc thù của loại Consumer này trong raw.consumer; Detector cần đọc tại đó nếu phân tích các thuộc tính này."
+  },
+  "S012": {
+    "label": "benign",
+    "file": "benign/sample_s012.json",
+    "source": "synthetic",
+    "scenario": "Ghi nhận notepad khởi động vào file log",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "log_process",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Thư mục C:\\D12Lab\\logs tồn tại và tài khoản thực thi có quyền ghi."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "relationship_note": "Hai mẫu thuộc nhóm log_process dùng chung một filter_path và có hai consumer_path khác nhau.",
+    "normalizer_note": "Normalizer hiện tại giữ thuộc tính đặc thù của loại Consumer này trong raw.consumer; Detector cần đọc tại đó nếu phân tích các thuộc tính này."
+  },
+  "S013": {
+    "label": "benign",
+    "file": "benign/sample_s013.json",
+    "source": "synthetic",
+    "scenario": "PowerShell đọc trạng thái dịch vụ",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "powershell_service",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Dịch vụ Spooler tồn tại."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S014": {
+    "label": "benign",
+    "file": "benign/sample_s014.json",
+    "source": "synthetic",
+    "scenario": "Lệnh cmd hiển thị thông báo kiểm tra",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "cmd_echo",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S015": {
+    "label": "benign",
+    "file": "benign/sample_s015.json",
+    "source": "synthetic",
+    "scenario": "PowerShell hiển thị thông báo kiểm tra",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "powershell_output",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S016": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s016.json",
+    "source": "synthetic",
+    "scenario": "PowerShell truyền lệnh qua Base64 UTF-16LE",
+    "reason": "Tham số EncodedCommand khớp R01. Nội dung giải mã chỉ hiển thị thông báo hoặc đọc thời gian.",
+    "expected_rule_ids": [
+      "R01"
+    ],
+    "rule_descriptions": {
+      "R01": "Cảnh báo khi Consumer gọi PowerShell với -EncodedCommand; tiêu chí là dạng truyền lệnh cần kiểm tra thêm."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "encoded_command",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "decoded_command": "Get-Date"
+  },
+  "S017": {
+    "label": "benign",
+    "file": "benign/sample_s017.json",
+    "source": "synthetic",
+    "scenario": "VBScript tính toán trong bộ nhớ",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "script_arithmetic",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Bộ máy VBScript khả dụng trong Windows VM."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S018": {
+    "label": "benign",
+    "file": "benign/sample_s018.json",
+    "source": "synthetic",
+    "scenario": "Ghi sự kiện thay đổi dịch vụ vào Event Log",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "eventlog_service",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Nguồn Event Log D12LabAudit được đăng ký phù hợp.",
+      "Dịch vụ Spooler tồn tại."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "normalizer_note": "Normalizer hiện tại giữ thuộc tính đặc thù của loại Consumer này trong raw.consumer; Detector cần đọc tại đó nếu phân tích các thuộc tính này."
+  },
+  "S019": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s019.json",
+    "source": "synthetic",
+    "scenario": "ActiveScript khởi chạy cmd để hiển thị thông báo",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R04"
+    ],
+    "rule_descriptions": {
+      "R04": "Cảnh báo khi ActiveScriptEventConsumer dùng WScript.Shell để khởi chạy shell; tiêu chí dựa trên nội dung script, không dựa riêng vào loại Consumer."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "script_shell",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "VBScript và đối tượng COM WScript.Shell khả dụng."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S020": {
+    "label": "benign",
+    "file": "benign/sample_s020.json",
+    "source": "synthetic",
+    "scenario": "Ghi nhận dịch vụ Spooler thay đổi trạng thái",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "log_service",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "Dịch vụ Spooler tồn tại.",
+      "Thư mục log tồn tại và có quyền ghi."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm.",
+    "normalizer_note": "Normalizer hiện tại giữ thuộc tính đặc thù của loại Consumer này trong raw.consumer; Detector cần đọc tại đó nếu phân tích các thuộc tính này."
+  },
+  "S021": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s021.json",
+    "source": "synthetic",
+    "scenario": "Thực thi file batch từ thư mục Temp qua cmd",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R03"
+    ],
+    "rule_descriptions": {
+      "R03": "Cảnh báo khi đường dẫn chương trình hoặc script được thực thi nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; quyền ghi thực tế chưa được xác minh."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "temp_batch",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "File lab-check.cmd chưa được cung cấp; nếu dựng lab chỉ dùng nội dung echo Lab check."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S022": {
+    "label": "benign",
+    "file": "benign/sample_s022.json",
+    "source": "synthetic",
+    "scenario": "Đọc tài khoản của tiến trình thực thi",
+    "reason": "Mẫu không khớp R01–R04 trong chính sách thử nghiệm.",
+    "expected_rule_ids": [],
+    "rule_descriptions": {},
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "identity_query",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S023": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s023.json",
+    "source": "synthetic",
+    "scenario": "ActiveScript tham chiếu file script trong Temp",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R03"
+    ],
+    "rule_descriptions": {
+      "R03": "Cảnh báo khi đường dẫn chương trình hoặc script được thực thi nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; quyền ghi thực tế chưa được xác minh."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "temp_vbscript",
+    "split": "evaluation",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "VBScript khả dụng.",
+      "File check.vbs chưa được cung cấp; nội dung dự kiến chỉ xử lý biến trong bộ nhớ."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  },
+  "S024": {
+    "label": "suspicious",
+    "file": "suspicious/sample_s024.json",
+    "source": "synthetic",
+    "scenario": "ActiveScript khởi chạy PowerShell đọc thời gian",
+    "reason": "Mẫu khớp các tiêu chí cảnh báo đã chỉ định.",
+    "expected_rule_ids": [
+      "R04"
+    ],
+    "rule_descriptions": {
+      "R04": "Cảnh báo khi ActiveScriptEventConsumer dùng WScript.Shell để khởi chạy shell; tiêu chí dựa trên nội dung script, không dựa riêng vào loại Consumer."
+    },
+    "label_definition": "Nhãn theo chính sách thử nghiệm R01–R04: suspicious là cấu hình cần cảnh báo; benign là cấu hình không khớp các tiêu chí này. Nhãn không chứng minh có mã độc hoặc đã được phê duyệt ngoài thực tế.",
+    "scenario_group": "script_shell",
+    "split": "development",
+    "data_quality": "complete",
+    "vm_verified": false,
+    "subscription_created": null,
+    "trigger_observed": null,
+    "action_observed": null,
+    "prerequisites": [
+      "VBScript và đối tượng COM WScript.Shell khả dụng."
+    ],
+    "usage_note": "Chỉ đưa bản ghi Subscription vào Detector. ID, tên file, thư mục, labels.json và split chỉ phục vụ quản lý/đánh giá. Các mẫu cùng scenario_group phải ở cùng tập. Đây là dữ liệu mô phỏng dùng phát triển và kiểm thử; cần tập dữ liệu VM độc lập để đánh giá thực nghiệm."
+  }
+}

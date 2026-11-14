@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S020",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_11977f2d",
+    "query": "SELECT * FROM __InstanceModificationEvent WITHIN 30 WHERE TargetInstance ISA 'Win32_Service' AND TargetInstance.Name = 'Spooler' AND TargetInstance.State <> PreviousInstance.State",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_11977f2d\""
+  },
+  "consumer": {
+    "name": "Action_009e7b07",
+    "type": "LogFileEventConsumer",
+    "filename": "C:\\D12Lab\\logs\\service.log",
+    "text": "Service state changed",
+    "path": "root\\subscription:LogFileEventConsumer.Name=\"Action_009e7b07\""
+  },
+  "binding": {
+    "filter": "Trigger_11977f2d",
+    "consumer": "Action_009e7b07",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_11977f2d\"",
+    "consumer_path": "root\\subscription:LogFileEventConsumer.Name=\"Action_009e7b07\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

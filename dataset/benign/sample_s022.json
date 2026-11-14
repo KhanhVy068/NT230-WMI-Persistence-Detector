@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S022",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_e35fe35f",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_e35fe35f\""
+  },
+  "consumer": {
+    "name": "Action_ae311cd5",
+    "type": "CommandLineEventConsumer",
+    "command_line": "whoami.exe",
+    "executable_path": "C:\\Windows\\System32\\whoami.exe",
+    "path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_ae311cd5\""
+  },
+  "binding": {
+    "filter": "Trigger_e35fe35f",
+    "consumer": "Action_ae311cd5",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_e35fe35f\"",
+    "consumer_path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_ae311cd5\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

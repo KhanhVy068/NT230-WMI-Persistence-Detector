@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S001",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_7c9cbec3",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_7c9cbec3\""
+  },
+  "consumer": {
+    "name": "Action_f976e1c0",
+    "type": "CommandLineEventConsumer",
+    "command_line": "\"C:\\Users\\Public\\LabTools\\check.exe\"",
+    "executable_path": "C:\\Users\\Public\\LabTools\\check.exe",
+    "path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_f976e1c0\""
+  },
+  "binding": {
+    "filter": "Trigger_7c9cbec3",
+    "consumer": "Action_f976e1c0",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_7c9cbec3\"",
+    "consumer_path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_f976e1c0\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

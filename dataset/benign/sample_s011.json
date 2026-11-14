@@ -1,0 +1,32 @@
+{
+  "subscription_id": "S011",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_1e4a2b0a",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_1e4a2b0a\""
+  },
+  "consumer": {
+    "name": "Action_6c9b1cf2",
+    "type": "NTEventLogEventConsumer",
+    "source_name": "D12LabAudit",
+    "event_id": 1201,
+    "event_type": 4,
+    "number_of_insertion_strings": 1,
+    "insertion_string_templates": [
+      "D12 audit event"
+    ],
+    "path": "root\\subscription:NTEventLogEventConsumer.Name=\"Action_6c9b1cf2\""
+  },
+  "binding": {
+    "filter": "Trigger_1e4a2b0a",
+    "consumer": "Action_6c9b1cf2",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_1e4a2b0a\"",
+    "consumer_path": "root\\subscription:NTEventLogEventConsumer.Name=\"Action_6c9b1cf2\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

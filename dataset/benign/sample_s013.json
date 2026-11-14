@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S013",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_103b5915",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_103b5915\""
+  },
+  "consumer": {
+    "name": "Action_5cd1616a",
+    "type": "CommandLineEventConsumer",
+    "command_line": "powershell.exe -NoProfile -Command \"Get-Service -Name Spooler\"",
+    "executable_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_5cd1616a\""
+  },
+  "binding": {
+    "filter": "Trigger_103b5915",
+    "consumer": "Action_5cd1616a",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_103b5915\"",
+    "consumer_path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_5cd1616a\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

@@ -1,0 +1,32 @@
+{
+  "subscription_id": "S018",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_6bb2bf92",
+    "query": "SELECT * FROM __InstanceModificationEvent WITHIN 30 WHERE TargetInstance ISA 'Win32_Service' AND TargetInstance.Name = 'Spooler' AND TargetInstance.State <> PreviousInstance.State",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_6bb2bf92\""
+  },
+  "consumer": {
+    "name": "Action_d3738360",
+    "type": "NTEventLogEventConsumer",
+    "source_name": "D12LabAudit",
+    "event_id": 1202,
+    "event_type": 4,
+    "number_of_insertion_strings": 1,
+    "insertion_string_templates": [
+      "D12 audit event"
+    ],
+    "path": "root\\subscription:NTEventLogEventConsumer.Name=\"Action_d3738360\""
+  },
+  "binding": {
+    "filter": "Trigger_6bb2bf92",
+    "consumer": "Action_d3738360",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_6bb2bf92\"",
+    "consumer_path": "root\\subscription:NTEventLogEventConsumer.Name=\"Action_d3738360\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

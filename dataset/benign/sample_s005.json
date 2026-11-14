@@ -1,0 +1,28 @@
+{
+  "subscription_id": "S005",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_f035ea7e",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_f035ea7e\""
+  },
+  "consumer": {
+    "name": "Action_51a91f93",
+    "type": "ActiveScriptEventConsumer",
+    "scripting_engine": "VBScript",
+    "script_text": "Dim message\nmessage = \"Lab check\"",
+    "script_file_name": null,
+    "path": "root\\subscription:ActiveScriptEventConsumer.Name=\"Action_51a91f93\""
+  },
+  "binding": {
+    "filter": "Trigger_f035ea7e",
+    "consumer": "Action_51a91f93",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_f035ea7e\"",
+    "consumer_path": "root\\subscription:ActiveScriptEventConsumer.Name=\"Action_51a91f93\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

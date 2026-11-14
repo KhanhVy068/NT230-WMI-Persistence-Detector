@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S007",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_f2811b8c",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_f2811b8c\""
+  },
+  "consumer": {
+    "name": "Action_fa2fff3d",
+    "type": "CommandLineEventConsumer",
+    "command_line": "PowerShell.exe   -NoProfile   -windowstyle hidden -Command \"Get-Date\"",
+    "executable_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_fa2fff3d\""
+  },
+  "binding": {
+    "filter": "Trigger_f2811b8c",
+    "consumer": "Action_fa2fff3d",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_f2811b8c\"",
+    "consumer_path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_fa2fff3d\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}

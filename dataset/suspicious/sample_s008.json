@@ -1,0 +1,27 @@
+{
+  "subscription_id": "S008",
+  "computer": "D12-VM",
+  "namespace": "root\\subscription",
+  "filter": {
+    "name": "Trigger_6dc4c338",
+    "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+    "query_language": "WQL",
+    "event_namespace": "root\\cimv2",
+    "path": "root\\subscription:__EventFilter.Name=\"Trigger_6dc4c338\""
+  },
+  "consumer": {
+    "name": "Action_acbb46f8",
+    "type": "CommandLineEventConsumer",
+    "command_line": "powershell.exe -NoProfile -WindowStyle Hidden -Command \"Write-Output 'Lab check'\"",
+    "executable_path": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_acbb46f8\""
+  },
+  "binding": {
+    "filter": "Trigger_6dc4c338",
+    "consumer": "Action_acbb46f8",
+    "filter_path": "root\\subscription:__EventFilter.Name=\"Trigger_6dc4c338\"",
+    "consumer_path": "root\\subscription:CommandLineEventConsumer.Name=\"Action_acbb46f8\""
+  },
+  "resolution_status": "complete",
+  "missing_objects": []
+}
