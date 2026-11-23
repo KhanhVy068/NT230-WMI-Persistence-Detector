@@ -111,6 +111,12 @@ class TestDetectionReportSchema(SchemaTestCase):
         r04_alert = next(alert for alert in matched["alerts"] if alert["rule_id"] == "R04")
         self.assert_valid("alert.schema.json", r04_alert)
 
+        script_host = engine.analyze_normalized(normalize_data(wmi_data=command_subscription(
+            'cscript.exe //NoLogo "C:\\Users\\Lab\\Downloads\\check.vbs"', "SCHEMA-SCRIPT-HOST",
+        )))
+        self.assert_valid("detection-report.schema.json", script_host)
+        self.assertEqual(script_host["alerts"][0]["evidence"][0]["execution_role"], "script_host_file")
+
         no_alert = engine.analyze_normalized(
             normalize_data(wmi_data=command_subscription("cmd.exe /c echo safe", "SCHEMA-NO-ALERT"))
         )

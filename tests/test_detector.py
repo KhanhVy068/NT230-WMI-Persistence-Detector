@@ -300,6 +300,12 @@ class TestR03Matching(unittest.TestCase):
                 "cmd_c_target",
             ),
             (
+                normalized_subscription(
+                    'cscript.exe //NoLogo "C:\\Users\\Lab User\\Downloads\\check.vbs"'
+                ),
+                "script_host_file",
+            ),
+            (
                 normalized_with_consumer(
                     None,
                     type="ActiveScriptEventConsumer",

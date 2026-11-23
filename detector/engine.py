@@ -42,6 +42,7 @@ RULE_SCOPE = {
             "Executable trực tiếp tĩnh trong consumer.command_line.",
             "Script path sau PowerShell -File.",
             "File chương trình/batch tĩnh ngay sau cmd.exe /c.",
+            "Script path tĩnh truyền cho cscript.exe hoặc wscript.exe.",
             "consumer.script_file_name của ActiveScriptEventConsumer.",
         ],
         "recognized_path_groups": {
@@ -53,7 +54,7 @@ RULE_SCOPE = {
         "not_analyzed_execution_forms": [
             "PowerShell -Command, consumer.script_text, command wrapper và chuỗi dựng động.",
             "Path tương đối/bare, biến môi trường chưa biết, hoặc command line không tách token an toàn.",
-            "Cú pháp cmd.exe /c phức tạp không có file tĩnh ngay sau /c.",
+            "Cú pháp cmd.exe /c hoặc cscript/wscript phức tạp không có script/file tĩnh xác định được.",
         ],
         "conclusion_limit": "Match chỉ nói đích thực thi được cấu hình nằm trong nhóm path lab; không xác minh file tồn tại, quyền ghi hoặc việc thực thi thực tế.",
         "safety": "Detector chỉ phân tích văn bản theo ngữ nghĩa Windows và không dùng filesystem/môi trường của máy chạy Detector.",

@@ -77,6 +77,7 @@
             "direct_executable",
             "powershell_file",
             "cmd_c_target",
+            "script_host_file",
             "active_script_file"
           ]
         },

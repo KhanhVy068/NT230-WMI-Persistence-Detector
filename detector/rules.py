@@ -480,6 +480,16 @@ def _extract_r03_targets(consumer: Dict[str, Any]) -> Dict[str, Any]:
                                 tokens[index + 1], "cmd_c_target",
                             )
                         break
+            elif executable_name in {"cscript", "cscript.exe", "wscript", "wscript.exe"}:
+                for raw_token in tokens[1:]:
+                    if _strip_outer_quotes(raw_token).strip().startswith("/"):
+                        continue
+                    if _looks_path_like(raw_token):
+                        _add_execution_target(
+                            assessment, "consumer.command_line", command_line,
+                            raw_token, "script_host_file",
+                        )
+                        break
 
     script_file_name = consumer.get("script_file_name")
     if isinstance(script_file_name, str) and script_file_name.strip():
