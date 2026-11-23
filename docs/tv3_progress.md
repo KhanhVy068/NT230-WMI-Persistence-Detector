@@ -7,9 +7,11 @@
 - Regression development, test schema và harness Collector cho môi trường Python Store/UWP.
 - Rà soát trước evaluation: phân biệt Consumer type không phân biệt hoa/thường; R04 không suy đoán lời gọi trực tiếp hay nhiều câu lệnh VBScript trên một dòng.
 
-## Baseline evaluation
+## Baseline và lịch sử evaluation
 
-Commit hành vi trước evaluation: `3b01c8b6c75bb16be5a9328766e9b2c525f45e60`.
+### Lần đầu — giữ nguyên
+
+Commit hành vi: `3b01c8b6c75bb16be5a9328766e9b2c525f45e60`.
 
 | File | SHA-256 |
 |---|---|
@@ -19,6 +21,21 @@ Commit hành vi trước evaluation: `3b01c8b6c75bb16be5a9328766e9b2c525f45e60`.
 | `detector/__init__.py` | `AFF86B174D5CFCBD791DDEB98CF9A15286B95FA28F986C252C2DA0E6F6D6148B` |
 
 Evaluation chỉ được chạy sau baseline này. Nếu có sửa Detector sau khi đọc evaluation, cần ghi baseline/hash mới và giữ riêng kết quả chạy lại.
+
+Kết quả evaluation đầu tiên lưu ở `results/tv3_evaluation_baseline_3b01c8b.json`: subscription TP=3, FP=0, TN=4, FN=1; Precision=1.0, Recall=0.75, F1≈0.8571, FPR=0. S006 là FN R03 vì đường dẫn script tĩnh sau `cscript.exe` chưa được trích xuất.
+
+### Lần chạy lại sau sửa coverage R03
+
+Commit hành vi: `900f70bc5f90d69a45f5991b500e6c269416c105`.
+
+| File | SHA-256 |
+|---|---|
+| `detector/rules.py` | `BB40C71B7E94B0B43C182756AE63E71636CAD078D1A3E64C5A5F07BE69251196` |
+| `detector/engine.py` | `8D9A5CA2F7E40AF7BB7B2384B60D4AC98D26EA017D786C69101591D48E5686C4` |
+| `detector/alert_generator.py` | `599A932E4C177799E98AF52F2EF39B760C9498FB7D5E15AE1B9183A1FD713616` |
+| `detector/__init__.py` | `AFF86B174D5CFCBD791DDEB98CF9A15286B95FA28F986C252C2DA0E6F6D6148B` |
+
+Kết quả chạy lại phải dùng đúng baseline này và được lưu thành file riêng; không thay thế file lần đầu.
 
 ## Lệnh kiểm tra đã dùng
 
@@ -32,7 +49,7 @@ Với lỗi quyền `%TEMP%` của Python Store/UWP, dùng lệnh trong `docs/co
 
 ## Đang làm và bước tiếp theo
 
-- Chạy evaluation lần đầu bằng baseline trên, lưu report từng Subscription và metrics theo Subscription/rule.
+- Chạy lại evaluation bằng baseline thứ hai, lưu report từng Subscription và metrics theo Subscription/rule.
 - Sau evaluation, hoàn thiện tài liệu học và checklist tích hợp/VM cho TV4.
 
 ## Chờ Windows VM
