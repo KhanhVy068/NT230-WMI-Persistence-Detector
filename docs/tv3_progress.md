@@ -6,6 +6,8 @@
 - Contract Normalizer/Detector/Alert, JSON Schema Draft 2020-12 và validation API/CLI.
 - Regression development, test schema và harness Collector cho môi trường Python Store/UWP.
 - Rà soát trước evaluation: phân biệt Consumer type không phân biệt hoa/thường; R04 không suy đoán lời gọi trực tiếp hay nhiều câu lệnh VBScript trên một dòng.
+- Evaluation lần đầu và lần chạy lại được giữ riêng trong `results/`; lỗi coverage `cscript/wscript` R03 đã có regression test và scope cập nhật.
+- Tài liệu TV4, checklist VM và tài liệu học TV3 bám code hiện tại.
 
 ## Baseline và lịch sử evaluation
 
@@ -49,8 +51,8 @@ Với lỗi quyền `%TEMP%` của Python Store/UWP, dùng lệnh trong `docs/co
 
 ## Đang làm và bước tiếp theo
 
-- Hoàn thiện tài liệu học và checklist tích hợp/VM cho TV4.
 - Chạy live test khi có Windows VM nhóm cung cấp.
+- TV4 tích hợp qua API/schema và mở PR từ `feature/detection-engine` vào nhánh chung khi nhóm sẵn sàng.
 
 ## Chờ Windows VM
 

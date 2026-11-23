@@ -118,3 +118,28 @@ python -X utf8 -m detector.engine --input output/normalized.json --output output
 | `2` | Đã ghi report nhưng upstream hoặc ít nhất một analysis thiếu dữ liệu. |
 
 CLI không cho `--input` trùng `--output` và ghi output theo cách atomic. Trước khi tích hợp VM hoặc chạy evaluation, TV4 nên dừng/đánh dấu riêng report có mã `2`, sau đó xử lý `issues`, `unavailable_fields`, và `unanalysed_forms` theo ngữ cảnh vận hành.
+
+## Checklist Windows VM khi sẵn sàng
+
+TV3 chưa chạy live test vì nhóm chưa cung cấp VM. Không cần tải hay khởi tạo VM trước checklist này.
+
+1. Trên VM Windows, xác nhận Python 3.9+ và chạy tại root repository. Cài dependency validation nếu cần: `python -X utf8 -m pip install -r requirements.txt`.
+2. Chạy live Collector test (không đặt biến này trên máy không có nguồn WMI/Event Log phù hợp):
+
+   ```powershell
+   $env:D12_RUN_LIVE_TESTS = "1"
+   python -X utf8 -m unittest discover -s tests -p test_collector.py -v
+   Remove-Item Env:D12_RUN_LIVE_TESTS
+   ```
+
+3. Thu WMI và Event Log thật, sau đó chuẩn hóa:
+
+   ```powershell
+   python -X utf8 collector/wmi_collector.py --output output/wmi_snapshot.json
+   python -X utf8 collector/eventlog_collector.py --hours 24 --max-events 1000 --output output/eventlogs.json
+   python -X utf8 collector/normalizer.py --wmi output/wmi_snapshot.json --eventlogs output/eventlogs.json --output output/normalized.json
+   ```
+
+4. Chạy Detector bằng CLI ở trên. Lưu cả `normalized.json`, `detection-report.json`, stderr và `$LASTEXITCODE` cho lần thu đó.
+5. Nếu Collector/Normalizer/Detector trả `2`, vẫn giữ output nhưng báo rõ partial cùng `issues`, `unavailable_fields`, `unanalysed_forms`. Không suy ra không có persistence chỉ vì không có Alert.
+6. Đối chiếu evidence với cấu hình lab thực tế, không chạy nội dung command/script lấy từ report. Đánh giá VM phải tách khỏi synthetic evaluation trong `docs/tv3_evaluation.md`.
