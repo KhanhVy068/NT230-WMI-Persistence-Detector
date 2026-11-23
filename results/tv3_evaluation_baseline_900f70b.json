@@ -1,0 +1,872 @@
+{
+  "evaluation_format_version": "1.0",
+  "baseline": "900f70bc5f90d69a45f5991b500e6c269416c105",
+  "generated_at": "2026-11-23T16:43:48.247395+00:00",
+  "python_version": "3.12.10",
+  "split": "evaluation",
+  "enabled_rule_ids": [
+    "R01",
+    "R02",
+    "R03",
+    "R04"
+  ],
+  "metrics_policy": {
+    "subscription_positive": "Một subscription là predicted positive khi matched_rule_ids không rỗng.",
+    "rule_positive": "Mỗi cặp subscription/rule được so sánh với expected_rule_ids của label.",
+    "zero_denominator": "Precision, recall, F1 hoặc FPR là null khi mẫu số bằng 0; không thay bằng 0 hoặc 1.",
+    "incomplete_data": "Không loại mẫu incomplete khỏi metric; coverage báo riêng IDs bị incomplete.",
+    "unanalysed_forms": "Không loại mẫu có unanalysed_forms; coverage báo riêng để diễn giải giới hạn."
+  },
+  "coverage": {
+    "subscriptions": 8,
+    "complete_subscriptions": 7,
+    "incomplete_subscription_ids": [
+      "S023"
+    ],
+    "subscriptions_with_unanalysed_forms": [
+      "S013",
+      "S017",
+      "S023"
+    ]
+  },
+  "subscription_metrics": {
+    "tp": 4,
+    "fp": 0,
+    "tn": 4,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "fpr": 0.0
+  },
+  "rule_metrics": {
+    "R01": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 8,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "fpr": 0.0
+    },
+    "R02": {
+      "tp": 1,
+      "fp": 0,
+      "tn": 7,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "fpr": 0.0
+    },
+    "R03": {
+      "tp": 4,
+      "fp": 0,
+      "tn": 4,
+      "fn": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "fpr": 0.0
+    },
+    "R04": {
+      "tp": 0,
+      "fp": 0,
+      "tn": 8,
+      "fn": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "fpr": 0.0
+    }
+  },
+  "rule_metrics_micro": {
+    "tp": 5,
+    "fp": 0,
+    "tn": 27,
+    "fn": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "fpr": 0.0
+  },
+  "results": [
+    {
+      "subscription_id": "S001",
+      "file": "suspicious/sample_s001.json",
+      "label": "suspicious",
+      "data_quality": "complete",
+      "expected_rule_ids": [
+        "R03"
+      ],
+      "predicted_rule_ids": [
+        "R03"
+      ],
+      "predicted_alert": true,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S001",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [
+          "R03"
+        ],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_applicable",
+            "reason": "Executable trực tiếp trong consumer.command_line không phải PowerShell.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_applicable",
+            "reason": "Executable trực tiếp trong consumer.command_line không phải PowerShell.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "matched",
+            "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+            "evidence": [
+              {
+                "field": "consumer.executable_path",
+                "value": "C:\\Users\\Public\\LabTools\\check.exe",
+                "matched_text": "C:\\Users\\Public\\LabTools\\check.exe",
+                "execution_target": "C:\\Users\\Public\\LabTools\\check.exe",
+                "execution_role": "configured_executable",
+                "path_groups": [
+                  "Users\\Public"
+                ]
+              },
+              {
+                "field": "consumer.command_line",
+                "value": "\"C:\\Users\\Public\\LabTools\\check.exe\"",
+                "matched_text": "\"C:\\Users\\Public\\LabTools\\check.exe\"",
+                "execution_target": "C:\\Users\\Public\\LabTools\\check.exe",
+                "execution_role": "direct_executable",
+                "path_groups": [
+                  "Users\\Public"
+                ]
+              }
+            ],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_applicable",
+            "reason": "R04 chỉ áp dụng cho ActiveScriptEventConsumer có script_text VBScript.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": []
+      },
+      "alerts": [
+        {
+          "alert_id": "ALR-9bcbf2868f7f20a1049bf519b6b739418a6fa5de6f56d350a10205c6e27ed8a8",
+          "rule_id": "R03",
+          "subscription_id": "S001",
+          "computer": "D12-VM",
+          "namespace": "root\\subscription",
+          "severity": "medium",
+          "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+          "evidence": [
+            {
+              "field": "consumer.executable_path",
+              "value": "C:\\Users\\Public\\LabTools\\check.exe",
+              "matched_text": "C:\\Users\\Public\\LabTools\\check.exe",
+              "execution_target": "C:\\Users\\Public\\LabTools\\check.exe",
+              "execution_role": "configured_executable",
+              "path_groups": [
+                "Users\\Public"
+              ]
+            },
+            {
+              "field": "consumer.command_line",
+              "value": "\"C:\\Users\\Public\\LabTools\\check.exe\"",
+              "matched_text": "\"C:\\Users\\Public\\LabTools\\check.exe\"",
+              "execution_target": "C:\\Users\\Public\\LabTools\\check.exe",
+              "execution_role": "direct_executable",
+              "path_groups": [
+                "Users\\Public"
+              ]
+            }
+          ],
+          "data_status": "complete"
+        }
+      ]
+    },
+    {
+      "subscription_id": "S003",
+      "file": "suspicious/sample_s003.json",
+      "label": "suspicious",
+      "data_quality": "complete",
+      "expected_rule_ids": [
+        "R02",
+        "R03"
+      ],
+      "predicted_rule_ids": [
+        "R02",
+        "R03"
+      ],
+      "predicted_alert": true,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S003",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [
+          "R02",
+          "R03"
+        ],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_matched",
+            "reason": "Đã phân tích lời gọi PowerShell trực tiếp nhưng không có tham số đầy đủ -EncodedCommand.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "matched",
+            "reason": "PowerShell được gọi trực tiếp với tham số -WindowStyle và giá trị Hidden.",
+            "evidence": [
+              {
+                "field": "consumer.command_line",
+                "value": "powershell.exe -NoProfile -WindowStyle Hidden -File \"C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1\"",
+                "matched_text": "-WindowStyle Hidden"
+              }
+            ],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "matched",
+            "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+            "evidence": [
+              {
+                "field": "consumer.command_line",
+                "value": "powershell.exe -NoProfile -WindowStyle Hidden -File \"C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1\"",
+                "matched_text": "\"C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1\"",
+                "execution_target": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1",
+                "execution_role": "powershell_file",
+                "path_groups": [
+                  "AppData",
+                  "Temp"
+                ]
+              }
+            ],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_applicable",
+            "reason": "R04 chỉ áp dụng cho ActiveScriptEventConsumer có script_text VBScript.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": []
+      },
+      "alerts": [
+        {
+          "alert_id": "ALR-5ce3dde54f9953b435a39805d247db9579d1837ff7db76396125b61c8d0ba49a",
+          "rule_id": "R02",
+          "subscription_id": "S003",
+          "computer": "D12-VM",
+          "namespace": "root\\subscription",
+          "severity": "medium",
+          "reason": "PowerShell được gọi trực tiếp với tham số -WindowStyle và giá trị Hidden.",
+          "evidence": [
+            {
+              "field": "consumer.command_line",
+              "value": "powershell.exe -NoProfile -WindowStyle Hidden -File \"C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1\"",
+              "matched_text": "-WindowStyle Hidden"
+            }
+          ],
+          "data_status": "complete"
+        },
+        {
+          "alert_id": "ALR-adae0fd3d7c79543b3d22069d5c939be49a8bfc6945a1fd8a066a97f463e5ff1",
+          "rule_id": "R03",
+          "subscription_id": "S003",
+          "computer": "D12-VM",
+          "namespace": "root\\subscription",
+          "severity": "medium",
+          "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+          "evidence": [
+            {
+              "field": "consumer.command_line",
+              "value": "powershell.exe -NoProfile -WindowStyle Hidden -File \"C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1\"",
+              "matched_text": "\"C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1\"",
+              "execution_target": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.ps1",
+              "execution_role": "powershell_file",
+              "path_groups": [
+                "AppData",
+                "Temp"
+              ]
+            }
+          ],
+          "data_status": "complete"
+        }
+      ]
+    },
+    {
+      "subscription_id": "S006",
+      "file": "suspicious/sample_s006.json",
+      "label": "suspicious",
+      "data_quality": "complete",
+      "expected_rule_ids": [
+        "R03"
+      ],
+      "predicted_rule_ids": [
+        "R03"
+      ],
+      "predicted_alert": true,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S006",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [
+          "R03"
+        ],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_applicable",
+            "reason": "Executable trực tiếp trong consumer.command_line không phải PowerShell.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_applicable",
+            "reason": "Executable trực tiếp trong consumer.command_line không phải PowerShell.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "matched",
+            "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+            "evidence": [
+              {
+                "field": "consumer.command_line",
+                "value": "cscript.exe //NoLogo \"C:\\Users\\LabUser\\Downloads\\check.vbs\"",
+                "matched_text": "\"C:\\Users\\LabUser\\Downloads\\check.vbs\"",
+                "execution_target": "C:\\Users\\LabUser\\Downloads\\check.vbs",
+                "execution_role": "script_host_file",
+                "path_groups": [
+                  "Downloads"
+                ]
+              }
+            ],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_applicable",
+            "reason": "R04 chỉ áp dụng cho ActiveScriptEventConsumer có script_text VBScript.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": []
+      },
+      "alerts": [
+        {
+          "alert_id": "ALR-0390e3246badba23552ca15f44307434059a89c6010c2ae0d75d19bb5e8d083d",
+          "rule_id": "R03",
+          "subscription_id": "S006",
+          "computer": "D12-VM",
+          "namespace": "root\\subscription",
+          "severity": "medium",
+          "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+          "evidence": [
+            {
+              "field": "consumer.command_line",
+              "value": "cscript.exe //NoLogo \"C:\\Users\\LabUser\\Downloads\\check.vbs\"",
+              "matched_text": "\"C:\\Users\\LabUser\\Downloads\\check.vbs\"",
+              "execution_target": "C:\\Users\\LabUser\\Downloads\\check.vbs",
+              "execution_role": "script_host_file",
+              "path_groups": [
+                "Downloads"
+              ]
+            }
+          ],
+          "data_status": "complete"
+        }
+      ]
+    },
+    {
+      "subscription_id": "S013",
+      "file": "benign/sample_s013.json",
+      "label": "benign",
+      "data_quality": "complete",
+      "expected_rule_ids": [],
+      "predicted_rule_ids": [],
+      "predicted_alert": false,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [
+        {
+          "field": "consumer.command_line",
+          "reason": "Nội dung PowerShell -Command là script động, không được phân tích R03.",
+          "rule_id": "R03"
+        }
+      ],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S013",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_matched",
+            "reason": "Đã phân tích lời gọi PowerShell trực tiếp nhưng không có tham số đầy đủ -EncodedCommand.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_matched",
+            "reason": "Đã phân tích lời gọi PowerShell trực tiếp nhưng không có -WindowStyle Hidden ở mức tham số.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "not_matched",
+            "reason": "Đã kiểm tra các đích thực thi tĩnh hỗ trợ nhưng không nằm trong nhóm path R03.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": [
+              {
+                "field": "consumer.command_line",
+                "reason": "Nội dung PowerShell -Command là script động, không được phân tích R03."
+              }
+            ]
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_applicable",
+            "reason": "R04 chỉ áp dụng cho ActiveScriptEventConsumer có script_text VBScript.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": [
+          {
+            "field": "consumer.command_line",
+            "reason": "Nội dung PowerShell -Command là script động, không được phân tích R03.",
+            "rule_id": "R03"
+          }
+        ]
+      },
+      "alerts": []
+    },
+    {
+      "subscription_id": "S017",
+      "file": "benign/sample_s017.json",
+      "label": "benign",
+      "data_quality": "complete",
+      "expected_rule_ids": [],
+      "predicted_rule_ids": [],
+      "predicted_alert": false,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [
+        {
+          "field": "consumer.script_text",
+          "rule_id": "R03",
+          "reason": "R03 không suy ra đích thực thi từ consumer.script_text hoặc script động."
+        }
+      ],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S017",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "not_applicable",
+            "reason": "Không có đích thực thi tĩnh thuộc dạng R03 hỗ trợ để kết luận.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_matched",
+            "reason": "Đã phân tích VBScript tĩnh nhưng không có quan hệ WScript.Shell -> Run/Exec phù hợp R04.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": [
+          {
+            "field": "consumer.script_text",
+            "rule_id": "R03",
+            "reason": "R03 không suy ra đích thực thi từ consumer.script_text hoặc script động."
+          }
+        ]
+      },
+      "alerts": []
+    },
+    {
+      "subscription_id": "S018",
+      "file": "benign/sample_s018.json",
+      "label": "benign",
+      "data_quality": "complete",
+      "expected_rule_ids": [],
+      "predicted_rule_ids": [],
+      "predicted_alert": false,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S018",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "not_applicable",
+            "reason": "Không có đích thực thi tĩnh thuộc dạng R03 hỗ trợ để kết luận.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_applicable",
+            "reason": "R04 chỉ áp dụng cho ActiveScriptEventConsumer có script_text VBScript.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": []
+      },
+      "alerts": []
+    },
+    {
+      "subscription_id": "S020",
+      "file": "benign/sample_s020.json",
+      "label": "benign",
+      "data_quality": "complete",
+      "expected_rule_ids": [],
+      "predicted_rule_ids": [],
+      "predicted_alert": false,
+      "data_status": "complete",
+      "unavailable_fields": [],
+      "unanalysed_forms": [],
+      "normalization_status": "ok",
+      "detector_status": "ok",
+      "analysis": {
+        "subscription_id": "S020",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "complete",
+        "unavailable_fields": [],
+        "matched_rule_ids": [],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "not_applicable",
+            "reason": "Không có đích thực thi tĩnh thuộc dạng R03 hỗ trợ để kết luận.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "not_applicable",
+            "reason": "R04 chỉ áp dụng cho ActiveScriptEventConsumer có script_text VBScript.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          }
+        },
+        "unanalysed_forms": []
+      },
+      "alerts": []
+    },
+    {
+      "subscription_id": "S023",
+      "file": "suspicious/sample_s023.json",
+      "label": "suspicious",
+      "data_quality": "complete",
+      "expected_rule_ids": [
+        "R03"
+      ],
+      "predicted_rule_ids": [
+        "R03"
+      ],
+      "predicted_alert": true,
+      "data_status": "incomplete",
+      "unavailable_fields": [
+        "consumer.script_text"
+      ],
+      "unanalysed_forms": [
+        {
+          "field": "consumer.script_file_name",
+          "reason": "R04 cần script_text; Detector không mở ScriptFileName trên máy chạy để suy ra nội dung script.",
+          "rule_id": "R04"
+        }
+      ],
+      "normalization_status": "ok",
+      "detector_status": "partial",
+      "analysis": {
+        "subscription_id": "S023",
+        "computer": "D12-VM",
+        "namespace": "root\\subscription",
+        "resolution_status": "complete",
+        "data_status": "incomplete",
+        "unavailable_fields": [
+          "consumer.script_text"
+        ],
+        "matched_rule_ids": [
+          "R03"
+        ],
+        "rule_results": {
+          "R01": {
+            "rule_id": "R01",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R02": {
+            "rule_id": "R02",
+            "status": "not_applicable",
+            "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R03": {
+            "rule_id": "R03",
+            "status": "matched",
+            "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+            "evidence": [
+              {
+                "field": "consumer.script_file_name",
+                "value": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.vbs",
+                "matched_text": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.vbs",
+                "execution_target": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.vbs",
+                "execution_role": "active_script_file",
+                "path_groups": [
+                  "AppData",
+                  "Temp"
+                ]
+              }
+            ],
+            "notes": [],
+            "unavailable_fields": [],
+            "unanalysed_forms": []
+          },
+          "R04": {
+            "rule_id": "R04",
+            "status": "insufficient_data",
+            "reason": "Thiếu consumer.script_text để phân tích hành vi R04.",
+            "evidence": [],
+            "notes": [],
+            "unavailable_fields": [
+              "consumer.script_text"
+            ],
+            "unanalysed_forms": [
+              {
+                "field": "consumer.script_file_name",
+                "reason": "R04 cần script_text; Detector không mở ScriptFileName trên máy chạy để suy ra nội dung script."
+              }
+            ]
+          }
+        },
+        "unanalysed_forms": [
+          {
+            "field": "consumer.script_file_name",
+            "reason": "R04 cần script_text; Detector không mở ScriptFileName trên máy chạy để suy ra nội dung script.",
+            "rule_id": "R04"
+          }
+        ]
+      },
+      "alerts": [
+        {
+          "alert_id": "ALR-e14ca36b7c8a96446d7f68180370d9692cb19a4eadbbe6f265015b4fb883eaf7",
+          "rule_id": "R03",
+          "subscription_id": "S023",
+          "computer": "D12-VM",
+          "namespace": "root\\subscription",
+          "severity": "medium",
+          "reason": "Đích thực thi được cấu hình nằm trong Temp, AppData, Downloads hoặc Users\\Public theo chính sách lab; Detector không xác minh file, quyền hoặc lần thực thi thực tế.",
+          "evidence": [
+            {
+              "field": "consumer.script_file_name",
+              "value": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.vbs",
+              "matched_text": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.vbs",
+              "execution_target": "C:\\Users\\LabUser\\AppData\\Local\\Temp\\check.vbs",
+              "execution_role": "active_script_file",
+              "path_groups": [
+                "AppData",
+                "Temp"
+              ]
+            }
+          ],
+          "data_status": "incomplete"
+        }
+      ]
+    }
+  ],
+  "subscription_ids": [
+    "S001",
+    "S003",
+    "S006",
+    "S013",
+    "S017",
+    "S018",
+    "S020",
+    "S023"
+  ]
+}

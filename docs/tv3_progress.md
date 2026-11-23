@@ -35,7 +35,7 @@ Commit hành vi: `900f70bc5f90d69a45f5991b500e6c269416c105`.
 | `detector/alert_generator.py` | `599A932E4C177799E98AF52F2EF39B760C9498FB7D5E15AE1B9183A1FD713616` |
 | `detector/__init__.py` | `AFF86B174D5CFCBD791DDEB98CF9A15286B95FA28F986C252C2DA0E6F6D6148B` |
 
-Kết quả chạy lại phải dùng đúng baseline này và được lưu thành file riêng; không thay thế file lần đầu.
+Kết quả chạy lại đã lưu ở `results/tv3_evaluation_baseline_900f70b.json`: subscription TP=4, FP=0, TN=4, FN=0; Precision=Recall=F1=1.0, FPR=0. File lần đầu vẫn được giữ để thể hiện phát hiện S006 và thay đổi sau đó.
 
 ## Lệnh kiểm tra đã dùng
 
@@ -49,8 +49,8 @@ Với lỗi quyền `%TEMP%` của Python Store/UWP, dùng lệnh trong `docs/co
 
 ## Đang làm và bước tiếp theo
 
-- Chạy lại evaluation bằng baseline thứ hai, lưu report từng Subscription và metrics theo Subscription/rule.
-- Sau evaluation, hoàn thiện tài liệu học và checklist tích hợp/VM cho TV4.
+- Hoàn thiện tài liệu học và checklist tích hợp/VM cho TV4.
+- Chạy live test khi có Windows VM nhóm cung cấp.
 
 ## Chờ Windows VM
 
