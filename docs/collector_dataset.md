@@ -119,6 +119,19 @@ Chạy kiểm thử giả lập.
 python -X utf8 -m unittest discover -s tests -p test_collector.py -v
 ```
 
+Nếu Python bản Store/UWP báo `PermissionError` với `%TEMP%`, tạo một thư mục
+rỗng trong workspace bằng PowerShell rồi dùng runner sau. Runner chỉ dùng thư
+mục được truyền cho test hiện tại, không thay đổi ACL hay đụng các thư mục
+`tests/tmp*` bị khóa.
+
+```powershell
+$scratch = Join-Path $PWD "tests\.collector_test_scratch"
+if (Test-Path -LiteralPath $scratch) { throw "Scratch directory already exists" }
+New-Item -ItemType Directory -Path $scratch | Out-Null
+python -X utf8 tests/run_collector_tests.py --temp-dir $scratch
+Remove-Item -LiteralPath $scratch
+```
+
 Bật thêm kiểm thử đọc dữ liệu thực tế trên Windows VM.
 
 ```powershell
