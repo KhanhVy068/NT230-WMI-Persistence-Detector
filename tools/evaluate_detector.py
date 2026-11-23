@@ -14,6 +14,10 @@ import sys
 import tempfile
 from typing import Any, Dict, Iterable, List
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from collector.normalizer import load_json, normalize_data
 from detector.engine import analyze_normalized
 from detector.rules import ENABLED_RULE_IDS
