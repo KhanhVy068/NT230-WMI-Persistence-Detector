@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nt230-wmi-persistence-detector.local/schemas/alert.schema.json",
+  "title": "TV3 Detection Alert",
+  "description": "Một Alert do TV3 tạo cho đúng một subscription và một rule có trạng thái matched.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "alert_id": {
+      "type": "string",
+      "pattern": "^ALR-[0-9a-f]{64}$",
+      "description": "SHA-256 ổn định của subscription_id, computer, namespace và rule_id."
+    },
+    "rule_id": { "$ref": "#/$defs/ruleId" },
+    "subscription_id": { "type": "string" },
+    "computer": { "type": ["string", "null"] },
+    "namespace": { "type": "string" },
+    "severity": { "const": "medium" },
+    "reason": { "type": "string", "minLength": 1 },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/evidence" }
+    },
+    "data_status": { "$ref": "#/$defs/dataStatus" }
+  },
+  "required": [
+    "alert_id",
+    "rule_id",
+    "subscription_id",
+    "computer",
+    "namespace",
+    "severity",
+    "reason",
+    "evidence",
+    "data_status"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": { "rule_id": { "const": "R04" } },
+        "required": ["rule_id"]
+      },
+      "then": {
+        "properties": {
+          "evidence": {
+            "allOf": [
+              { "contains": { "$ref": "#/$defs/r04CreationEvidence" } },
+              { "contains": { "$ref": "#/$defs/r04CallEvidence" } }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "ruleId": {
+      "type": "string",
+      "enum": ["R01", "R02", "R03", "R04"]
+    },
+    "dataStatus": {
+      "type": "string",
+      "enum": ["complete", "incomplete"]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": { "type": "string", "minLength": 1 },
+        "value": { "type": "string" },
+        "matched_text": { "type": "string", "minLength": 1 },
+        "execution_target": { "type": "string", "minLength": 1 },
+        "execution_role": {
+          "type": "string",
+          "enum": [
+            "configured_executable",
+            "direct_executable",
+            "powershell_file",
+            "cmd_c_target",
+            "active_script_file"
+          ]
+        },
+        "path_groups": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["Temp", "AppData", "Downloads", "Users\\Public"]
+          }
+        },
+        "evidence_role": {
+          "type": "string",
+          "enum": ["wscript_shell_creation", "wscript_shell_call"]
+        },
+        "variable": { "type": "string", "minLength": 1 },
+        "method": { "type": "string", "enum": ["run", "exec"] },
+        "shell_name": {
+          "type": "string",
+          "enum": ["cmd", "cmd.exe", "powershell", "powershell.exe", "pwsh", "pwsh.exe"]
+        },
+        "command_literal": { "type": "string", "minLength": 2 }
+      },
+      "required": ["field", "value", "matched_text"]
+    },
+    "r04CreationEvidence": {
+      "allOf": [
+        { "$ref": "#/$defs/evidence" },
+        {
+          "properties": {
+            "evidence_role": { "const": "wscript_shell_creation" }
+          },
+          "required": ["evidence_role", "variable"]
+        }
+      ]
+    },
+    "r04CallEvidence": {
+      "allOf": [
+        { "$ref": "#/$defs/evidence" },
+        {
+          "properties": {
+            "evidence_role": { "const": "wscript_shell_call" }
+          },
+          "required": [
+            "evidence_role",
+            "variable",
+            "method",
+            "execution_target",
+            "shell_name",
+            "command_literal"
+          ]
+        }
+      ]
+    }
+  }
+}

@@ -1,43 +1,118 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nt230-wmi-persistence-detector.local/schemas/subscription.schema.json",
+  "title": "Normalized WMI Subscription",
+  "description": "Một phần tử subscriptions do collector.normalizer.normalize_data() tạo. Component hoặc trường chi tiết có thể null khi dữ liệu upstream thiếu.",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
-    "subscription_id": {
-      "type": "string"
+    "subscription_id": { "type": "string", "minLength": 1 },
+    "id_origin": {
+      "type": "string",
+      "enum": ["input", "generated_from_content"]
     },
-    "namespace": {
-      "type": "string"
-    },
+    "computer": { "type": ["string", "null"] },
+    "namespace": { "type": "string", "minLength": 1 },
     "filter": {
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "query": { "type": "string" }
-      },
-      "required": [ "name", "query" ]
+      "anyOf": [
+        { "$ref": "#/$defs/filter" },
+        { "type": "null" }
+      ]
     },
     "consumer": {
-      "type": "object",
-      "properties": {
-        "name": { "type": "string" },
-        "type": { "type": "string" }
-      },
-      "required": [ "name", "type" ]
+      "anyOf": [
+        { "$ref": "#/$defs/consumer" },
+        { "type": "null" }
+      ]
     },
-    "binding": {
-      "type": "object",
-      "properties": {
-        "filter": { "type": "string" },
-        "consumer": { "type": "string" }
-      },
-      "required": [ "filter", "consumer" ]
-    }
+    "binding": { "$ref": "#/$defs/binding" },
+    "resolution_status": {
+      "type": "string",
+      "enum": ["complete", "incomplete"]
+    },
+    "missing_objects": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["filter", "consumer"] }
+    },
+    "raw": { "type": "object" }
   },
   "required": [
     "subscription_id",
+    "id_origin",
+    "computer",
     "namespace",
     "filter",
     "consumer",
-    "binding"
-  ]
+    "binding",
+    "resolution_status",
+    "missing_objects",
+    "raw"
+  ],
+  "$defs": {
+    "nullableString": { "type": ["string", "null"] },
+    "filter": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/nullableString" },
+        "query": { "$ref": "#/$defs/nullableString" },
+        "query_language": { "$ref": "#/$defs/nullableString" },
+        "event_namespace": { "$ref": "#/$defs/nullableString" },
+        "path": { "$ref": "#/$defs/nullableString" },
+        "identity": { "$ref": "#/$defs/nullableString" }
+      },
+      "required": ["name", "query", "query_language", "event_namespace", "path", "identity"]
+    },
+    "consumer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/nullableString" },
+        "type": { "$ref": "#/$defs/nullableString" },
+        "command_line": { "$ref": "#/$defs/nullableString" },
+        "executable_path": { "$ref": "#/$defs/nullableString" },
+        "script_text": { "$ref": "#/$defs/nullableString" },
+        "script_file_name": { "$ref": "#/$defs/nullableString" },
+        "scripting_engine": { "$ref": "#/$defs/nullableString" },
+        "path": { "$ref": "#/$defs/nullableString" },
+        "identity": { "$ref": "#/$defs/nullableString" }
+      },
+      "required": [
+        "name",
+        "type",
+        "command_line",
+        "executable_path",
+        "script_text",
+        "script_file_name",
+        "scripting_engine",
+        "path",
+        "identity"
+      ]
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "filter": { "$ref": "#/$defs/nullableString" },
+        "consumer": { "$ref": "#/$defs/nullableString" },
+        "filter_path": { "$ref": "#/$defs/nullableString" },
+        "consumer_path": { "$ref": "#/$defs/nullableString" },
+        "path": { "$ref": "#/$defs/nullableString" },
+        "identity": { "$ref": "#/$defs/nullableString" },
+        "filter_identity": { "$ref": "#/$defs/nullableString" },
+        "consumer_identity": { "$ref": "#/$defs/nullableString" }
+      },
+      "required": [
+        "filter",
+        "consumer",
+        "filter_path",
+        "consumer_path",
+        "path",
+        "identity",
+        "filter_identity",
+        "consumer_identity"
+      ]
+    }
+  }
 }

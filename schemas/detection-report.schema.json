@@ -1,0 +1,344 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nt230-wmi-persistence-detector.local/schemas/detection-report.schema.json",
+  "title": "TV3 WMI Subscription Detection Report",
+  "description": "Report do detector.engine.analyze_normalized() hoặc CLI TV3 tạo từ một Normalizer bundle hợp lệ.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "format_version": { "const": "1.0" },
+    "report_type": { "const": "wmi_subscription_detection" },
+    "input_format_version": { "type": "string", "minLength": 1 },
+    "detector_status": { "$ref": "#/$defs/detectorStatus" },
+    "enabled_rule_ids": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ruleId" }
+    },
+    "not_implemented_rule_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/ruleId" }
+    },
+    "rule_scope": { "$ref": "#/$defs/ruleScope" },
+    "upstream": { "$ref": "#/$defs/upstream" },
+    "analyses": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/analysis" }
+    },
+    "alerts": {
+      "type": "array",
+      "items": { "$ref": "alert.schema.json" }
+    },
+    "summary": { "$ref": "#/$defs/summary" }
+  },
+  "required": [
+    "format_version",
+    "report_type",
+    "input_format_version",
+    "detector_status",
+    "enabled_rule_ids",
+    "not_implemented_rule_ids",
+    "rule_scope",
+    "upstream",
+    "analyses",
+    "alerts",
+    "summary"
+  ],
+  "$defs": {
+    "ruleId": {
+      "type": "string",
+      "enum": ["R01", "R02", "R03", "R04"]
+    },
+    "ruleStatus": {
+      "type": "string",
+      "enum": ["matched", "not_matched", "not_applicable", "insufficient_data"]
+    },
+    "dataStatus": {
+      "type": "string",
+      "enum": ["complete", "incomplete"]
+    },
+    "detectorStatus": {
+      "type": "string",
+      "enum": ["ok", "partial"]
+    },
+    "unanalysedForm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "field": { "type": "string", "minLength": 1 },
+        "reason": { "type": "string", "minLength": 1 },
+        "rule_id": { "$ref": "#/$defs/ruleId" }
+      },
+      "required": ["field", "reason"]
+    },
+    "analysisUnanalysedForm": {
+      "allOf": [
+        { "$ref": "#/$defs/unanalysedForm" },
+        { "required": ["rule_id"] }
+      ]
+    },
+    "ruleResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rule_id": { "$ref": "#/$defs/ruleId" },
+        "status": { "$ref": "#/$defs/ruleStatus" },
+        "reason": { "type": "string", "minLength": 1 },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "alert.schema.json#/$defs/evidence" }
+        },
+        "notes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "unavailable_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "unanalysed_forms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/unanalysedForm" }
+        }
+      },
+      "required": [
+        "rule_id",
+        "status",
+        "reason",
+        "evidence",
+        "notes",
+        "unavailable_fields",
+        "unanalysed_forms"
+      ]
+    },
+    "r04RuleResult": {
+      "allOf": [
+        { "$ref": "#/$defs/ruleResult" },
+        {
+          "properties": { "rule_id": { "const": "R04" } },
+          "required": ["rule_id"]
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "matched" } },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "evidence": {
+                "allOf": [
+                  { "contains": { "$ref": "alert.schema.json#/$defs/r04CreationEvidence" } },
+                  { "contains": { "$ref": "alert.schema.json#/$defs/r04CallEvidence" } }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ruleResults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "R01": {
+          "allOf": [
+            { "$ref": "#/$defs/ruleResult" },
+            { "properties": { "rule_id": { "const": "R01" } }, "required": ["rule_id"] }
+          ]
+        },
+        "R02": {
+          "allOf": [
+            { "$ref": "#/$defs/ruleResult" },
+            { "properties": { "rule_id": { "const": "R02" } }, "required": ["rule_id"] }
+          ]
+        },
+        "R03": {
+          "allOf": [
+            { "$ref": "#/$defs/ruleResult" },
+            { "properties": { "rule_id": { "const": "R03" } }, "required": ["rule_id"] }
+          ]
+        },
+        "R04": { "$ref": "#/$defs/r04RuleResult" }
+      },
+      "required": ["R01", "R02", "R03", "R04"]
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subscription_id": { "type": "string" },
+        "computer": { "type": ["string", "null"] },
+        "namespace": { "type": "string" },
+        "resolution_status": {
+          "type": "string",
+          "enum": ["complete", "incomplete"]
+        },
+        "data_status": { "$ref": "#/$defs/dataStatus" },
+        "unavailable_fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "matched_rule_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/ruleId" }
+        },
+        "rule_results": { "$ref": "#/$defs/ruleResults" },
+        "unanalysed_forms": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/analysisUnanalysedForm" }
+        }
+      },
+      "required": [
+        "subscription_id",
+        "computer",
+        "namespace",
+        "resolution_status",
+        "data_status",
+        "unavailable_fields",
+        "matched_rule_ids",
+        "rule_results",
+        "unanalysed_forms"
+      ]
+    },
+    "statusCounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "matched": { "type": "integer", "minimum": 0 },
+        "not_matched": { "type": "integer", "minimum": 0 },
+        "not_applicable": { "type": "integer", "minimum": 0 },
+        "insufficient_data": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["matched", "not_matched", "not_applicable", "insufficient_data"]
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subscriptions": { "type": "integer", "minimum": 0 },
+        "subscriptions_with_alerts": { "type": "integer", "minimum": 0 },
+        "alerts": { "type": "integer", "minimum": 0 },
+        "incomplete_subscriptions": { "type": "integer", "minimum": 0 },
+        "r01_status_counts": { "$ref": "#/$defs/statusCounts" },
+        "r02_status_counts": { "$ref": "#/$defs/statusCounts" },
+        "r03_status_counts": { "$ref": "#/$defs/statusCounts" },
+        "r04_status_counts": { "$ref": "#/$defs/statusCounts" }
+      },
+      "required": [
+        "subscriptions",
+        "subscriptions_with_alerts",
+        "alerts",
+        "incomplete_subscriptions",
+        "r01_status_counts",
+        "r02_status_counts",
+        "r03_status_counts",
+        "r04_status_counts"
+      ]
+    },
+    "issue": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "subscriptions": { "type": "integer", "minimum": 0 },
+        "events": { "type": "integer", "minimum": 0 },
+        "rejected_records": { "type": "integer", "minimum": 0 },
+        "issues": { "type": "integer", "minimum": 0 }
+      },
+      "required": ["subscriptions", "events", "rejected_records", "issues"]
+    },
+    "upstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "normalization_status": { "type": "string", "enum": ["ok", "partial"] },
+        "issues": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+        "counts": { "$ref": "#/$defs/counts" }
+      },
+      "required": ["normalization_status", "issues", "counts"]
+    },
+    "executionScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supported_execution_form": { "type": "string", "minLength": 1 },
+        "not_analyzed_execution_forms": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "safety": { "type": "string", "minLength": 1 }
+      },
+      "required": ["supported_execution_form", "not_analyzed_execution_forms", "safety"]
+    },
+    "r03Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supported_execution_sources": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "recognized_path_groups": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "Temp": { "type": "string" },
+            "AppData": { "type": "string" },
+            "Downloads": { "type": "string" },
+            "Users\\Public": { "type": "string" }
+          },
+          "required": ["Temp", "AppData", "Downloads", "Users\\Public"]
+        },
+        "not_analyzed_execution_forms": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "conclusion_limit": { "type": "string", "minLength": 1 },
+        "safety": { "type": "string", "minLength": 1 }
+      },
+      "required": [
+        "supported_execution_sources",
+        "recognized_path_groups",
+        "not_analyzed_execution_forms",
+        "conclusion_limit",
+        "safety"
+      ]
+    },
+    "r04Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "supported_vbscript_forms": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "not_analyzed_execution_forms": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "safety": { "type": "string", "minLength": 1 }
+      },
+      "required": ["supported_vbscript_forms", "not_analyzed_execution_forms", "safety"]
+    },
+    "ruleScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "R01": { "$ref": "#/$defs/executionScope" },
+        "R02": { "$ref": "#/$defs/executionScope" },
+        "R03": { "$ref": "#/$defs/r03Scope" },
+        "R04": { "$ref": "#/$defs/r04Scope" }
+      },
+      "required": ["R01", "R02", "R03", "R04"]
+    }
+  }
+}
