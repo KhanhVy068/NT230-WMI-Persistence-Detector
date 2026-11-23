@@ -18,7 +18,9 @@ Mỗi file kết quả giữ `analysis`, `alerts`, predicted/expected rule IDs v
 - **Mức Subscription:** positive khi `matched_rule_ids` không rỗng.
 - **Mức rule:** một cặp `(subscription, rule)` positive khi rule thuộc `expected_rule_ids`/`predicted_rule_ids`.
 - **Micro rule metric:** gộp mọi cặp Subscription/rule.
-- Nếu mẫu số là 0, metric là `null`, không thay bằng 0 hoặc 1.
+- Precision, Recall và FPR là `null` nếu mẫu số riêng của metric đó bằng 0.
+  F1 dùng trực tiếp `2*TP/(2*TP+FP+FN)` và chỉ là `null` khi mẫu số F1
+  bằng 0; không thay bất kỳ metric nào bằng 0 hoặc 1 khi mẫu số của nó bằng 0.
 - Mẫu `incomplete` hoặc có `unanalysed_forms` vẫn được tính metric và được báo riêng trong coverage; không có mẫu nào bị loại.
 
 ## Lần đầu — baseline `3b01c8b`

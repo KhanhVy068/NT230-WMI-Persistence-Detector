@@ -47,8 +47,11 @@ def _metrics(items: Iterable[Dict[str, bool]]) -> Dict[str, Any]:
     counts = _metric_counts(items)
     precision = _ratio(counts["tp"], counts["tp"] + counts["fp"])
     recall = _ratio(counts["tp"], counts["tp"] + counts["fn"])
-    f1 = None if precision is None or recall is None or precision + recall == 0 else (
-        2 * precision * recall / (precision + recall)
+    # Do not derive F1 from precision/recall: either individual denominator
+    # can be zero even though the F1 denominator is non-zero.
+    f1 = _ratio(
+        2 * counts["tp"],
+        2 * counts["tp"] + counts["fp"] + counts["fn"],
     )
     return {
         **counts,
@@ -140,7 +143,7 @@ def evaluate(labels: Dict[str, Any], dataset_root: Path, split: str, baseline: s
         "metrics_policy": {
             "subscription_positive": "Một subscription là predicted positive khi matched_rule_ids không rỗng.",
             "rule_positive": "Mỗi cặp subscription/rule được so sánh với expected_rule_ids của label.",
-            "zero_denominator": "Precision, recall, F1 hoặc FPR là null khi mẫu số bằng 0; không thay bằng 0 hoặc 1.",
+            "zero_denominator": "Precision, recall và FPR là null khi mẫu số riêng bằng 0. F1 dùng 2*TP/(2*TP+FP+FN) và chỉ là null khi mẫu số F1 bằng 0; không thay bằng 0 hoặc 1.",
             "incomplete_data": "Không loại mẫu incomplete khỏi metric; coverage báo riêng IDs bị incomplete.",
             "unanalysed_forms": "Không loại mẫu có unanalysed_forms; coverage báo riêng để diễn giải giới hạn.",
         },

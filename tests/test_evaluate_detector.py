@@ -38,6 +38,48 @@ class TestEvaluationMetrics(unittest.TestCase):
         self.assertIsNone(no_positive_predictions["f1"])
         self.assertEqual(no_positive_predictions["fpr"], 0.0)
 
+    def test_f1_uses_its_own_confusion_matrix_denominator(self):
+        cases = (
+            (
+                "tp=0, fp=1, fn=1",
+                [
+                    {"expected": False, "predicted": True},
+                    {"expected": True, "predicted": False},
+                ],
+                {"tp": 0, "fp": 1, "tn": 0, "fn": 1},
+                0.0,
+            ),
+            (
+                "only false positive",
+                [{"expected": False, "predicted": True}],
+                {"tp": 0, "fp": 1, "tn": 0, "fn": 0},
+                0.0,
+            ),
+            (
+                "only false negative",
+                [{"expected": True, "predicted": False}],
+                {"tp": 0, "fp": 0, "tn": 0, "fn": 1},
+                0.0,
+            ),
+            (
+                "only true negatives",
+                [{"expected": False, "predicted": False}],
+                {"tp": 0, "fp": 0, "tn": 1, "fn": 0},
+                None,
+            ),
+        )
+        for name, pairs, expected_counts, expected_f1 in cases:
+            with self.subTest(name=name):
+                metrics = _metrics(pairs)
+                self.assertEqual(
+                    {key: metrics[key] for key in ("tp", "fp", "tn", "fn")},
+                    expected_counts,
+                )
+                if expected_f1 is None:
+                    self.assertIsNone(metrics["f1"])
+                else:
+                    self.assertEqual(metrics["f1"], expected_f1)
+
     def test_evaluate_rejects_invalid_label_before_reading_sample(self):
         labels = {
             "S-INVALID": {
@@ -95,6 +137,10 @@ class TestEvaluationMetrics(unittest.TestCase):
         result = json.loads(output_path.read_text(encoding="utf-8"))
         self.assertEqual(result["subscription_metrics"]["tp"], 1)
         self.assertEqual(result["results"][0]["predicted_rule_ids"], ["R01"])
+        self.assertIn(
+            "2*TP/(2*TP+FP+FN)",
+            result["metrics_policy"]["zero_denominator"],
+        )
 
 
 if __name__ == "__main__":
