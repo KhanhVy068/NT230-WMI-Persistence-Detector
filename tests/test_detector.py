@@ -101,6 +101,13 @@ class TestDevelopmentData(unittest.TestCase):
 
 
 class TestR01Matching(unittest.TestCase):
+    def test_non_commandline_consumer_type_is_case_insensitive_when_command_is_missing(self):
+        bundle = normalized_with_consumer(None, type=" activescripteventconsumer ")
+        report = engine.analyze_normalized(bundle)
+        analysis = report["analyses"][0]
+        self.assertEqual(analysis["rule_results"]["R01"]["status"], "not_applicable")
+        self.assertEqual(analysis["rule_results"]["R02"]["status"], "not_applicable")
+
     def test_case_quotes_and_whitespace_preserve_original_evidence(self):
         command_line = (
             '"C:\\Program Files\\PowerShell\\7\\PoWeRsHeLl.ExE"   '
@@ -254,6 +261,15 @@ class TestR02Matching(unittest.TestCase):
 
 
 class TestR03Matching(unittest.TestCase):
+    def test_consumer_type_is_case_insensitive_for_active_script_file(self):
+        report = engine.analyze_normalized(normalized_with_consumer(
+            None,
+            type=" activescripteventconsumer ",
+            executable_path=None,
+            script_file_name="%TEMP%\\runner.vbs",
+        ))
+        self.assertEqual(report["analyses"][0]["rule_results"]["R03"]["status"], "matched")
+
     def test_supported_execution_sources_and_static_environment_variables(self):
         cases = [
             (
@@ -413,6 +429,10 @@ class TestR04Matching(unittest.TestCase):
                 "shell.Run commandLine"
             ),
             "CreateObject(\"WScript.Shell\").Run \"cmd.exe /c echo dynamic form\"",
+            (
+                "Set shell = CreateObject(\"WScript.Shell\") : "
+                "shell.Run \"cmd.exe /c echo compact form\""
+            ),
         ]
         for script in cases:
             with self.subTest(script=script):
@@ -423,6 +443,14 @@ class TestR04Matching(unittest.TestCase):
                 self.assertEqual(result["evidence"], [])
                 self.assertTrue(result["unanalysed_forms"])
                 self.assertTrue(any(form["rule_id"] == "R04" for form in analysis["unanalysed_forms"]))
+
+    def test_direct_run_on_other_createobject_is_not_treated_as_wscript_shell(self):
+        report = engine.analyze_normalized(normalized_active_script(
+            "CreateObject(\"Other.Object\").Run \"cmd.exe /c echo no\"",
+        ))
+        result = report["analyses"][0]["rule_results"]["R04"]
+        self.assertEqual(result["status"], "not_matched")
+        self.assertEqual(result["unanalysed_forms"], [])
 
     def test_missing_script_data_and_non_vbscript_are_explicit(self):
         no_consumer = normalized_subscription("cmd.exe /c echo no-consumer")

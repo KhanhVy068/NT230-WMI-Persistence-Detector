@@ -101,7 +101,11 @@ def _direct_powershell_context(subscription: Dict[str, Any]) -> Dict[str, Any]:
     command_line = consumer.get("command_line")
     consumer_type = consumer.get("type")
     if command_line is None:
-        if isinstance(consumer_type, str) and consumer_type.strip() and consumer_type != "CommandLineEventConsumer":
+        if (
+            isinstance(consumer_type, str)
+            and consumer_type.strip()
+            and consumer_type.strip().lower() != "commandlineeventconsumer"
+        ):
             return {
                 "status": "not_applicable",
                 "reason": "Mốc 2 chỉ phân tích consumer.command_line; Consumer này không phải CommandLineEventConsumer.",
@@ -405,7 +409,7 @@ def _extract_r03_targets(consumer: Dict[str, Any]) -> Dict[str, Any]:
         "unavailable_fields": [], "supported_targets": 0,
     }
     consumer_type = consumer.get("type")
-    consumer_type_lower = consumer_type.lower() if isinstance(consumer_type, str) else ""
+    consumer_type_lower = consumer_type.strip().lower() if isinstance(consumer_type, str) else ""
     executable_path = consumer.get("executable_path")
     configured_executable = None
     if isinstance(executable_path, str) and executable_path.strip():
@@ -560,7 +564,7 @@ _VBS_CALL = re.compile(
     re.IGNORECASE,
 )
 _VBS_DIRECT_CREATE_CALL = re.compile(
-    r'^\s*createobject\s*\(\s*"(?:""|[^"])*"\s*\)\s*\.\s*(?:run|exec)\b',
+    r'^\s*createobject\s*\(\s*"(?P<progid>(?:""|[^"])*)"\s*\)\s*\.\s*(?:run|exec)\b',
     re.IGNORECASE,
 )
 
@@ -588,6 +592,23 @@ def _vbscript_code(line: str) -> str:
     if re.match(r"^\s*rem(?:\s|$)", code, re.IGNORECASE):
         return ""
     return code
+
+
+def _has_vbscript_statement_separator(code: str) -> bool:
+    """Nhận diện dấu ``:`` ngoài chuỗi, vì nhiều câu lệnh một dòng ngoài scope."""
+    in_string = False
+    index = 0
+    while index < len(code):
+        character = code[index]
+        if character == '"':
+            if in_string and index + 1 < len(code) and code[index + 1] == '"':
+                index += 2
+                continue
+            in_string = not in_string
+        elif character == ":" and not in_string:
+            return True
+        index += 1
+    return False
 
 
 def _parse_vbscript_static_string(arguments: str):
@@ -624,7 +645,7 @@ def _parse_vbscript_r04(script_text: str) -> Dict[str, Any]:
     assessment = {
         "evidence": [], "notes": [], "unanalysed_forms": [],
         "active_shell_seen": False, "active_call_seen": False,
-        "static_non_shell_call_seen": False,
+        "static_non_shell_call_seen": False, "unsupported_form_seen": False,
     }
     active_shells = {}
     for line_number, raw_line in enumerate(script_text.splitlines(), start=1):
@@ -633,13 +654,27 @@ def _parse_vbscript_r04(script_text: str) -> Dict[str, Any]:
         if not stripped:
             continue
         if stripped.endswith("_"):
+            assessment["unsupported_form_seen"] = True
             assessment["unanalysed_forms"].append({
                 "field": "consumer.script_text",
                 "reason": f"Dòng {line_number} dùng line-continuation, nằm ngoài cú pháp VBScript tĩnh hỗ trợ.",
             })
             continue
 
-        if _VBS_DIRECT_CREATE_CALL.match(stripped):
+        if _has_vbscript_statement_separator(code):
+            assessment["unsupported_form_seen"] = True
+            assessment["unanalysed_forms"].append({
+                "field": "consumer.script_text",
+                "reason": (
+                    f"Dòng {line_number} có nhiều câu lệnh phân tách bằng :; "
+                    "R04 chỉ phân tích một câu lệnh tĩnh trên mỗi dòng."
+                ),
+            })
+            continue
+
+        direct_call = _VBS_DIRECT_CREATE_CALL.match(stripped)
+        if direct_call and direct_call.group("progid").replace('""', '"').lower() == "wscript.shell":
+            assessment["unsupported_form_seen"] = True
             assessment["active_call_seen"] = True
             assessment["unanalysed_forms"].append({
                 "field": "consumer.script_text",
@@ -813,6 +848,14 @@ def evaluate_r04(subscription: Dict[str, Any]) -> Dict[str, Any]:
             R04,
             "not_matched",
             "Đã xác định WScript.Shell gọi Run/Exec nhưng target tĩnh không thuộc shell R04 hỗ trợ.",
+            notes=assessment["notes"],
+            unanalysed_forms=assessment["unanalysed_forms"],
+        )
+    if assessment["unsupported_form_seen"]:
+        return _result(
+            R04,
+            "not_applicable",
+            "Script có cú pháp VBScript ngoài phạm vi R04 nên không được suy đoán kết quả.",
             notes=assessment["notes"],
             unanalysed_forms=assessment["unanalysed_forms"],
         )

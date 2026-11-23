@@ -19,7 +19,7 @@ REPORT_FORMAT_VERSION = "1.0"
 
 RULE_SCOPE = {
     "R01": {
-        "supported_execution_form": "PowerShell được gọi trực tiếp ở consumer.command_line với tham số đầy đủ -EncodedCommand trước -Command hoặc -File.",
+        "supported_execution_form": "PowerShell được gọi trực tiếp ở consumer.command_line với tham số đầy đủ -EncodedCommand trước -Command, -File hoặc --%.",
         "not_analyzed_execution_forms": [
             "PowerShell được gọi gián tiếp qua cmd.exe /c, shell wrapper hoặc process trung gian.",
             "PowerShell nằm trong consumer.script_text hoặc script_file_name.",
@@ -28,7 +28,7 @@ RULE_SCOPE = {
         "safety": "Detector chỉ phân tích văn bản; không chạy hoặc giải mã command/script.",
     },
     "R02": {
-        "supported_execution_form": "PowerShell được gọi trực tiếp ở consumer.command_line với tham số đầy đủ -WindowStyle và giá trị Hidden trước -Command hoặc -File.",
+        "supported_execution_form": "PowerShell được gọi trực tiếp ở consumer.command_line với tham số đầy đủ -WindowStyle và giá trị Hidden trước -Command, -File hoặc --%.",
         "not_analyzed_execution_forms": [
             "PowerShell được gọi gián tiếp qua cmd.exe /c, shell wrapper hoặc process trung gian.",
             "PowerShell nằm trong consumer.script_text hoặc script_file_name.",

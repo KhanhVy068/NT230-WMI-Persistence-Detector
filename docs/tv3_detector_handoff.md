@@ -84,12 +84,12 @@ Evidence luôn giữ `field`, `value`, và `matched_text` gốc. R03 thêm `exec
 
 ## Phạm vi rule hiện tại
 
-- **R01:** gọi PowerShell trực tiếp với `-EncodedCommand` đầy đủ, trước `-Command`/`-File`.
-- **R02:** gọi PowerShell trực tiếp với `-WindowStyle Hidden` đầy đủ, trước `-Command`/`-File`.
+- **R01:** gọi PowerShell trực tiếp với `-EncodedCommand` đầy đủ, trước `-Command`, `-File` hoặc `--%`.
+- **R02:** gọi PowerShell trực tiếp với `-WindowStyle Hidden` đầy đủ, trước `-Command`, `-File` hoặc `--%`.
 - **R03:** đích thực thi tĩnh trong Temp, AppData, Downloads hoặc Users\\Public từ các source nêu trong `rule_scope.R03`; không xác minh file tồn tại, quyền hoặc lần chạy thật.
 - **R04:** ActiveScriptEventConsumer VBScript gán `CreateObject("WScript.Shell")` vào biến, rồi chính biến đó gọi `.Run`/`.Exec` với lệnh tĩnh bắt đầu bằng `cmd`, `powershell` hoặc `pwsh` (có/không `.exe`).
 
-Các wrapper, command/script động, chuỗi ghép, script file không có nội dung, JScript và những cú pháp ngoài `rule_scope` không được coi là match. Đọc `rule_scope` trong report thay vì tự giả định khả năng parser.
+Các wrapper, command/script động, chuỗi ghép, script file không có nội dung, JScript, hay nhiều câu lệnh VBScript trên một dòng bằng `:` không được coi là match. Đọc `rule_scope` và `unanalysed_forms` trong report thay vì tự giả định khả năng parser.
 
 ## Đếm khi đánh giá
 
