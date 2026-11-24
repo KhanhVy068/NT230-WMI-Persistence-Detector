@@ -44,8 +44,13 @@ try {
     $locator = New-Object -ComObject WbemScripting.SWbemLocator
     $service = $locator.ConnectServer('.', $request.namespace)
     $service.Security_.ImpersonationLevel = 3
+    # InstancesOf trả về SWbemObjectSet. Lấy từng SWbemObject tường minh thay
+    # vì để PowerShell diễn giải collection COM như một instance.
+    # Không dùng wbemFlagForwardOnly (32), vì SWbemObjectSet.Count không hỗ trợ cờ đó.
+    $instances = $service.InstancesOf($request.class_name)
     $rows = @(
-        foreach ($instance in $service.InstancesOf($request.class_name, 48)) {
+        for ($index = 0; $index -lt $instances.Count; $index++) {
+            $instance = $instances.ItemIndex($index)
             $row = [ordered]@{
                 path = [string]$instance.Path_.Path
                 type = [string]$instance.Path_.Class
@@ -68,7 +73,11 @@ try {
             [pscustomobject]$row
         }
     )
-    ConvertTo-Json -InputObject $rows -Depth 16 -Compress
+    if ($rows.Count -eq 0) {
+        '[]'
+    } else {
+        ConvertTo-Json -InputObject $rows -Depth 16 -Compress
+    }
     exit 0
 } catch {
     [Console]::Error.WriteLine($_.Exception.Message)
@@ -115,13 +124,38 @@ def query_wmi(namespace: str, class_name: str, timeout: int = 60) -> list[dict]:
         raise RuntimeError(f"JSON trả về cho {class_name} không hợp lệ") from exc
     if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
         raise RuntimeError(f"Kết quả của {class_name} phải là mảng JSON chứa các đối tượng")
+    for index, row in enumerate(rows):
+        missing = [
+            field for field in ("path", "type", "identity")
+            if not isinstance(row.get(field), str) or not row[field].strip()
+        ]
+        if missing:
+            raise RuntimeError(
+                f"Dữ liệu WMI {namespace}/{class_name} chứa instance {index} "
+                f"thiếu hoặc rỗng: {', '.join(missing)}; không tạo bản ghi rỗng"
+            )
     return rows
+
+
+def _require_wmi_fields(item: dict, class_name: str, index: int, fields: tuple[str, ...]) -> None:
+    """Dừng rõ ràng khi WMI trả instance thiếu thuộc tính bắt buộc của lớp."""
+    missing = [
+        field for field in fields
+        if not isinstance(item.get(field), str) or not item[field].strip()
+    ]
+    if missing:
+        raise RuntimeError(
+            f"Dữ liệu WMI {class_name} instance {index} thiếu hoặc rỗng: "
+            f"{', '.join(missing)}; không tạo bản ghi rỗng"
+        )
 
 
 def collect_filters(namespace: str, timeout: int = 60) -> list[dict]:
     """Thu thập điều kiện, namespace sự kiện, đường dẫn và các thuộc tính gốc."""
-    return [
-        {
+    filters = []
+    for index, item in enumerate(query_wmi(namespace, "__EventFilter", timeout)):
+        _require_wmi_fields(item, "__EventFilter", index, ("Name", "Query", "QueryLanguage"))
+        filters.append({
             "name": item["Name"],
             "query": item["Query"],
             "query_language": item["QueryLanguage"],
@@ -129,15 +163,16 @@ def collect_filters(namespace: str, timeout: int = 60) -> list[dict]:
             "path": item["path"],
             "identity": item["identity"],
             "properties": item,
-        }
-        for item in query_wmi(namespace, "__EventFilter", timeout)
-    ]
+        })
+    return filters
 
 
 def collect_consumers(namespace: str, timeout: int = 60) -> list[dict]:
     """Thu thập các lớp con của Consumer và giữ cả thuộc tính tùy chỉnh."""
-    return [
-        {
+    consumers = []
+    for index, item in enumerate(query_wmi(namespace, "__EventConsumer", timeout)):
+        _require_wmi_fields(item, "__EventConsumer", index, ("Name",))
+        consumers.append({
             "name": item.get("Name"),
             "type": item["type"],
             "command_line": item.get("CommandLineTemplate"),
@@ -148,15 +183,16 @@ def collect_consumers(namespace: str, timeout: int = 60) -> list[dict]:
             "path": item["path"],
             "identity": item["identity"],
             "properties": item,
-        }
-        for item in query_wmi(namespace, "__EventConsumer", timeout)
-    ]
+        })
+    return consumers
 
 
 def collect_bindings(namespace: str, timeout: int = 60) -> list[dict]:
     """Thu thập đường dẫn tham chiếu và định danh được WMI phân tích."""
-    return [
-        {
+    bindings = []
+    for index, item in enumerate(query_wmi(namespace, "__FilterToConsumerBinding", timeout)):
+        _require_wmi_fields(item, "__FilterToConsumerBinding", index, ("Filter", "Consumer", "filter_identity", "consumer_identity"))
+        bindings.append({
             "path": item["path"],
             "identity": item["identity"],
             "filter_path": item["Filter"],
@@ -164,9 +200,8 @@ def collect_bindings(namespace: str, timeout: int = 60) -> list[dict]:
             "filter_identity": item["filter_identity"],
             "consumer_identity": item["consumer_identity"],
             "properties": item,
-        }
-        for item in query_wmi(namespace, "__FilterToConsumerBinding", timeout)
-    ]
+        })
+    return bindings
 
 
 def resolve_subscriptions(

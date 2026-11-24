@@ -152,6 +152,7 @@ Nếu hai ca Windows hiển thị `skipped` khi chạy chế độ mặc định
 | `can't open file` hoặc thiếu module | Mở PowerShell tại thư mục gốc dự án; kiểm tra các file trong `collector/` và `tests/` |
 | Báo yêu cầu Windows | Chạy WMI Collector và Event Log Collector trên Windows VM |
 | `access_denied` | Mở lại PowerShell bằng Run as administrator trên VM rồi thử lại; nếu còn lỗi, kiểm tra quyền tài khoản với nguồn dữ liệu |
+| `KeyError: 'Name'` khi thu WMI | Cập nhật Collector: lỗi này có thể do PowerShell tuần tự hóa chính `SWbemObjectSet` thay vì từng instance. Bản sửa đọc từng `SWbemObject` qua `ItemIndex`; nếu dữ liệu nguồn vẫn thiếu trường bắt buộc, Collector sẽ dừng với tên trường thiếu thay vì tạo bản ghi rỗng. |
 | Sysmon báo `missing` | Kiểm tra Sysmon đã được cài và có kênh log; nếu chỉ cần WMI-Activity, chạy với `--source wmi` |
 | `timeout` | Thử tăng `--timeout 120`; với Event Log, giảm `--hours` hoặc `--max-events` nếu truy vấn quá lớn |
 | `truncated=true` | Tăng `--max-events` hoặc thu hẹp khoảng thời gian; chạy lại và xem trường `sources` |

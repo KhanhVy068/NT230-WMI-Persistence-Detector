@@ -119,10 +119,33 @@ class TestWmiQuery(unittest.TestCase):
         return result, run.call_args
 
     def test_empty_single_and_multiple_records(self):
-        for records in ([], [{"Name": "Lọc"}], [{"Name": "A"}, {"Name": "B"}]):
+        for records in (
+            [],
+            [{"Name": "Lọc", "path": "filter-a", "type": "__EventFilter", "identity": "a"}],
+            [
+                {"Name": "A", "path": "filter-a", "type": "__EventFilter", "identity": "a"},
+                {"Name": "B", "path": "filter-b", "type": "__EventFilter", "identity": "b"},
+            ],
+        ):
             with self.subTest(count=len(records)):
                 result, _ = self.query_with_result("\ufeff" + json.dumps(records))
                 self.assertEqual(result, records)
+
+    def test_empty_collection_object_is_rejected_before_filter_processing(self):
+        pseudo_instance = [{"path": "", "type": "", "identity": ""}]
+        process = subprocess.CompletedProcess([], 0, json.dumps(pseudo_instance), "")
+        with patch.object(wmi.sys, "platform", "win32"), patch.object(
+            wmi.subprocess, "run", return_value=process
+        ), self.assertRaisesRegex(RuntimeError, "thiếu hoặc rỗng: path, type, identity"):
+            wmi.collect_filters(wmi.DEFAULT_NAMESPACE)
+
+    def test_powershell_indexes_swbem_object_set_before_reading_properties(self):
+        script = wmi.POWERSHELL_SCRIPT
+        self.assertIn("$instances = $service.InstancesOf($request.class_name)", script)
+        self.assertIn("$instance = $instances.ItemIndex($index)", script)
+        self.assertIn("foreach ($property in $instance.Properties_)", script)
+        self.assertNotIn("$service.InstancesOf($request.class_name, 48)", script)
+        self.assertIn("if ($rows.Count -eq 0)", script)
 
     def test_request_encoding_and_timeout(self):
         _, call = self.query_with_result("[]")
@@ -139,6 +162,30 @@ class TestWmiQuery(unittest.TestCase):
         for text in ("", "bad-json", "{}", "null", "[1]", '["abc"]'):
             with self.subTest(text=text), self.assertRaises(RuntimeError):
                 self.query_with_result(text)
+
+    def test_required_wmi_properties_are_reported_clearly(self):
+        cases = (
+            (
+                wmi.collect_filters,
+                {"path": "filter", "type": "__EventFilter", "identity": "filter-id"},
+                "__EventFilter instance 0 thiếu hoặc rỗng: Name, Query, QueryLanguage",
+            ),
+            (
+                wmi.collect_consumers,
+                {"path": "consumer", "type": "CommandLineEventConsumer", "identity": "consumer-id"},
+                "__EventConsumer instance 0 thiếu hoặc rỗng: Name",
+            ),
+            (
+                wmi.collect_bindings,
+                {"path": "binding", "type": "__FilterToConsumerBinding", "identity": "binding-id"},
+                "__FilterToConsumerBinding instance 0 thiếu hoặc rỗng: Filter, Consumer, filter_identity, consumer_identity",
+            ),
+        )
+        for collect, row, message in cases:
+            with self.subTest(collect=collect.__name__), patch.object(
+                wmi, "query_wmi", return_value=[row]
+            ), self.assertRaisesRegex(RuntimeError, message):
+                collect(wmi.DEFAULT_NAMESPACE)
 
     def test_powershell_failure_preserves_error(self):
         with self.assertRaisesRegex(RuntimeError, "access denied"):
@@ -178,8 +225,13 @@ class TestWmiCollection(unittest.TestCase):
         self.assertEqual(subscription["resolution_status"], "complete")
         self.assertEqual(subscription["missing_objects"], [])
         self.assertEqual(subscription["filter"]["name"], "Bộ lọc thử nghiệm")
+        self.assertEqual(subscription["filter"]["identity"], "filter-identity")
+        self.assertEqual(subscription["filter"]["properties"]["QueryLanguage"], "WQL")
         self.assertEqual(subscription["consumer"]["command_line"], "  cmd /c echo D12  ")
+        self.assertEqual(subscription["consumer"]["identity"], "consumer-identity")
         self.assertEqual(subscription["binding"]["consumer"], "LabConsumer")
+        self.assertEqual(subscription["binding"]["filter_identity"], "filter-identity")
+        self.assertEqual(subscription["binding"]["consumer_identity"], "consumer-identity")
         self.assertEqual(subscription["namespace"], wmi.DEFAULT_NAMESPACE)
         self.assertEqual(len(subscription["subscription_id"]), 64)
 
