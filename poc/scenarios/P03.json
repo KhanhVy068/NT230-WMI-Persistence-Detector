@@ -1,0 +1,17 @@
+
+{
+  "scenario_id": "P03",
+  "description": "WMI Persistence PoC with NTEventLogEventConsumer",
+  "namespace": "root\\subscription",
+  "event_namespace": "root\\cimv2",
+  "filter_name": "WMI_Lab_Filter_P03",
+  "consumer_name": "WMI_Lab_Consumer_P03",
+  "consumer_type": "NTEventLogEventConsumer",
+  "query_language": "WQL",
+  "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+  "event_source": "WMI-Lab-Test",
+  "event_id": 1003,
+  "event_type": 4,
+  "event_category": 0,
+  "marker_text": "WMI_P03_SUCCESS"
+}

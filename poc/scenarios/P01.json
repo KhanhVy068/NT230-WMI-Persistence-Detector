@@ -1,0 +1,13 @@
+{
+  "scenario_id": "P01",
+  "description": "Basic WMI Persistence PoC",
+  "namespace": "root\\subscription",
+  "event_namespace": "root\\cimv2",
+  "filter_name": "WMI_Lab_Filter_P01",
+  "consumer_name": "WMI_Lab_Consumer_P01",
+  "consumer_type": "LogFileEventConsumer",
+  "query_language": "WQL",
+  "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'notepad.exe'",
+  "marker_path": "results\\wmi_events.log",
+  "marker_text": "WMI_POC_SUCCESS"
+}

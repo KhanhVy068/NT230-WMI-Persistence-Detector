@@ -1,0 +1,13 @@
+{
+  "scenario_id": "P02",
+  "description": "WMI Persistence PoC with Modified Event Filter",
+  "namespace": "root\\subscription",
+  "event_namespace": "root\\cimv2",
+  "filter_name": "WMI_Lab_Filter_P02",
+  "consumer_name": "WMI_Lab_Consumer_P02",
+  "consumer_type": "LogFileEventConsumer",
+  "query_language": "WQL",
+  "query": "SELECT * FROM Win32_ProcessStartTrace WHERE ProcessName = 'CalculatorApp.exe'",
+  "marker_path": "results\\wmi_p02.log",
+  "marker_text": "WMI_P02_SUCCESS"
+}
